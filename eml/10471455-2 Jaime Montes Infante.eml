@@ -1,0 +1,742 @@
+Received: from DS0PR11MB8739.namprd11.prod.outlook.com (2603:10b6:8:1bb::19)
+ by SA0PR11MB4719.namprd11.prod.outlook.com with HTTPS; Tue, 10 Sep 2024
+ 19:00:33 +0000
+ARC-Seal: i=3; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=p3/g1E8qrkrPgo9nZiyfYQ6k+EgpBIIrb2mFjWrkcm5h2RotN7To/dORDvoQvaBBVwYhvkBhIqkLhVxr3JznCMchRH0V2yTAG24JfjgZzjnd0wJe/odXi7IuXxZ+aeArNjC/o4abihaFS+ZEIUIGBNIplFhmb8lSKhyjWn79dBb5lZfV2sQsjEAw9ctnD1hRv8YxAN8XpXQW8iHq2oXr/ITlG58UyuR37QAkQrcKMN2u+1fssxaqEsS4xlMm2XnKWwXEE5yNkQWnntnMutKWgFupc3BHsZG8VUwVKw1LKbosvtbmxHu+2r0uZDTPaOUyJsQrJg4UBPeBiTTV/ugHYg==
+ARC-Message-Signature: i=3; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1yD4GbhhpiCsfXbCGD7wQkbbpW5OO/0zse0oiXOe8x0=;
+ b=qz/+6OH4PaNd1SHNne0hIVJsjsbQU7jbAulrY7gpgCzQuYtS8P1SWb7GLA10aUS7aowZD5mAoVs6o9jItEq0ad73rns4w3m2SiCNBCYQ+0Rs3dsn4HGKyPduYT0PAGgV9rUDYdFh+RF6GH+PevKHWfzbuxuYrtgHncxf8vblnpo0PktjWGRAm58bsWW5jg/AV98UiWs7vpza3YZDBljyGGsDmoUV6Z7qgR0yR74WTVGFxuRlwTFu5EnvG7k5OCqQsdJpr/kyS3ZxwhrEYM856JAiRjqk45iTeuUU2feiOPt4XVAv5DVO/u81nwuV2K7UrIPi7lLAWvsMztva2P1/FQ==
+ARC-Authentication-Results: i=3; mx.microsoft.com 1; spf=neutral (sender ip is
+ 209.85.222.72) smtp.rcpttodomain=uc.cl smtp.mailfrom=webpaycl.transbank.cl;
+ dmarc=pass (p=quarantine sp=quarantine pct=25) action=none
+ header.from=transbank.cl; dkim=pass (signature was verified)
+ header.d=transbank.cl; dkim=pass (signature was verified)
+ header.d=amazonses.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,2,smtp.mailfrom=01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl]
+ dkim=[1,2,header.i=@transbank.cl] dmarc=[1,2,header.from=transbank.cl])
+Received: from SA1P222CA0149.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c2::26)
+ by DS0PR11MB8739.namprd11.prod.outlook.com (2603:10b6:8:1bb::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.28; Tue, 10 Sep
+ 2024 19:00:25 +0000
+Received: from SA2PEPF00001509.namprd04.prod.outlook.com
+ (2603:10b6:806:3c2:cafe::6) by SA1P222CA0149.outlook.office365.com
+ (2603:10b6:806:3c2::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24 via Frontend
+ Transport; Tue, 10 Sep 2024 19:00:25 +0000
+Authentication-Results: spf=neutral (sender IP is 209.85.222.72)
+ smtp.mailfrom=webpaycl.transbank.cl; dkim=pass (signature was verified)
+ header.d=transbank.cl;dmarc=pass action=none
+ header.from=transbank.cl;compauth=pass reason=100
+Received-SPF: Neutral (protection.outlook.com: 209.85.222.72 is neither
+ permitted nor denied by domain of webpaycl.transbank.cl)
+Received: from mail-ua1-f72.google.com (209.85.222.72) by
+ SA2PEPF00001509.mail.protection.outlook.com (10.167.242.41) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.7918.13
+ via Frontend Transport; Tue, 10 Sep 2024 19:00:24 +0000
+Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-8486718aa6fso163970241.2
+        for <eventos.ing@uc.cl>; Tue, 10 Sep 2024 12:00:24 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1725994824; cv=pass;
+        d=google.com; s=arc-20240605;
+        b=KTfJsRfSnfqEWUOLnuHrpFNndX46w47uY7PeoRBPKXbQqZdFPqjxRWYlJaGiBp4KIU
+         TbBWhh3Y0ph/d246Z8JmSkyq891lP+ZhiewM6PMlq56SWj1VzP8rOhYssDOv1zH3r4iH
+         XuqbP0FQb9/i+TRqlg3pclkky6ZwnIpeXX7nYLyfIQwZtjRf+3sNymNGY4BXoR+Kmz6r
+         1F5r3wkFIX6dcum2QsP9zThwoI+d+Ha1IDbdtJmTf2HWtPWHGcDk0OVcKxCBB//RUlfG
+         /sFrL28p9pW2O8oxahwhSrIK2n6tIifK+53oNS54Y7pgYZXJmwzdtXCuRqzwsr2W0nsN
+         bw+A==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:from:dkim-signature:dkim-signature;
+        bh=1yD4GbhhpiCsfXbCGD7wQkbbpW5OO/0zse0oiXOe8x0=;
+        fh=kqt+9RGmXqAOb3qYpEGyRPoybfSEZ+2sGAS5P653hI4=;
+        b=LROau5CazgmolRcWVO3xcrdZPf+sjpOoXSpVLpGX+Xl8Md2Yo0juvFCcsCXdfUevwV
+         afcfmpG9RhRSErSg+RNJpPy85P+nv9Eoov7Drl5xJnI1Q9dFdi6fCAw8bkqKiRi0Rk/Y
+         XR5MVF8IsxsSM/kqTj65ftInoHC/hG2Rtz4r2U0r0wvWqBpzI5T5/C2DSyS7sjItNbyw
+         Q3eIceipKd0dfA0Znr/ujZd0TpTQaVYLStTlmClzB4iY4UesNWQ6SmeLCi7bq9kDhh/O
+         of3OeeFMa2/ekpsKuPrVYYGFSfyEnRRwN/Tj2CSf29HT6avTRG75Wna3/U33jX0ro0pY
+         EuVQ==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@transbank.cl header.s=zvnh63n62n642khaooevh2pbutyxno3x header.b=IvuSlM66;
+       dkim=pass header.i=@amazonses.com header.s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug header.b="ZSd/d2PA";
+       spf=pass (google.com: domain of 01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl designates 54.240.73.80 as permitted sender) smtp.mailfrom=01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl;
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=transbank.cl
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725994824; x=1726599624;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:from:dkim-signature:dkim-signature:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1yD4GbhhpiCsfXbCGD7wQkbbpW5OO/0zse0oiXOe8x0=;
+        b=apjrTeu/dP//oOEHo2w4S1ezdQKHAqX/6eHbTg0aPVgbvBhN3iS9sXbnFxRMpnHlj1
+         kxLV4tbBnBqjDTiHJv4buiRe6C7vkUOkzn50UwvuI7jskyrm05KOu/h3NKXyMkYk9147
+         UU0NsYj/hLJyea8IjQebc4uq52MCge2UrMKW5yKY8Yq4s+Dvzd97/y5KbImT36rEaneP
+         ViCRYf4yvlcXGx4+phMc5KViQVYYaJI1blZiAU0kdBQ37dcke3ZUnJ2bBJIcBdREaunO
+         ZWdMjof25dwN4Ggjc3NOgYorL3V2lDa7RE51NGdxZW2k4B+8TMVm/D6GbTEdcltw+5Fg
+         xYcQ==
+X-Forwarded-Encrypted: i=2; AJvYcCWvgOj6F6CISAOA4ko45kzH3YWk3lQo0QaTDUktrk21kMn8HwQD76Wslz1cLMwPcUwT8/Wo8o1jYfiHfA==@uc.cl
+X-Gm-Message-State: AOJu0Ywa4AyFUmiHBV8vMHyUx05jz6Osd3jPZnR6ZJymiMDYUTO7XoFp
+	7FmjcjH4jPOEZK/nQ5bRzN8pueXyKGn0sNT6UTa6Jq1qSp9jxaJ3MP+vhy33SdJhWB6q5ilNhjB
+	YpX5TTBcAX1d79IzVBuXJy0edAE+RPSQz/hohpO708mwQES1WTjlUP4748OV1ImqfVvf1C02204
+	8mtrEi6L//
+X-Received: by 2002:a05:6102:304c:b0:493:e66a:793f with SMTP id ada2fe7eead31-49c242241cemr840703137.23.1725994823759;
+        Tue, 10 Sep 2024 12:00:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHKRxA9cTXbGVWUXAtuMIoY4FFyFqpzVFLqL2kEkDe6HV808wo0o6kTv50vaTbYI9VU7KAB
+X-Received: by 2002:a05:6102:304c:b0:493:e66a:793f with SMTP id ada2fe7eead31-49c242241cemr840496137.23.1725994821981;
+        Tue, 10 Sep 2024 12:00:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1725994821; cv=none;
+        d=google.com; s=arc-20240605;
+        b=IucUy8oQIv4UeWmoAdHsp9DVNB9YD5Fl5tFue1wbGCDWHdUwrfmaU6qGHWcVOuHGtG
+         7nXDGemPYFDjFjhuv0jwRZgTiQ5aKGVq847d4V7iP32L5u9QdNx0sZofNh2OMMvkvX21
+         x5g+EzpIaoh8a2sghq1u+DCpZx4mXThEhV6VUS/TsrrkxG/wskRzdguj4G1lvQIpgBae
+         NMjj+XcvJYzx+86TJu7WhSQ9L1LudgaBvb8pd/mt/7F3qN7Y4Oei+32pRiLwFt2hsIN5
+         VuoQAf01oOYrFub0gvsyRu9LLSar4SuUVHPCIe82AkgwPV++yb+V3w7uZP0lSUidLVTu
+         OO0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=feedback-id:date:message-id:content-transfer-encoding:mime-version
+         :subject:to:from:dkim-signature:dkim-signature;
+        bh=1yD4GbhhpiCsfXbCGD7wQkbbpW5OO/0zse0oiXOe8x0=;
+        fh=zOQ14RKKhNEVNWAQZgxG0/zENUy8MNoXqWi12hSV8b0=;
+        b=cX5EU9yURZ+FYNyiLHxvM9x7LkdxZtUrDq4cuPUwsJIt0L79s9fdBkSwLWRBNmMphg
+         ur/qO+NEqUeKpLmEVlUcam/g9jo+R6YR1Gb6mdwHqw6TlF/C9z8x1FsoB7+XV5/blzf9
+         CzDuGhs0PKnX+mN6FL33QASIGgi1fNPe0pWSZL2HkkMtvXNgmstJl9HE2YBxl1dfSOV5
+         E4Ey7jzuSvGxPJVfo1utFv+Bbz/eYgZrSzSUbdoHadm7Uqgm7u0yek8ly9KcZhxkNSvz
+         YfNmJO9azSRDHWgZ9RvNDFnIJo8odVXlC3d7GqUAVTjWixOHmIZI6Xw5uNO7lLNtFwOH
+         6pHg==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@transbank.cl header.s=zvnh63n62n642khaooevh2pbutyxno3x header.b=IvuSlM66;
+       dkim=pass header.i=@amazonses.com header.s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug header.b="ZSd/d2PA";
+       spf=pass (google.com: domain of 01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl designates 54.240.73.80 as permitted sender) smtp.mailfrom=01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl;
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE) header.from=transbank.cl
+Return-Path:
+ 01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl
+Received: from a73-80.smtp-out.amazonses.com (a73-80.smtp-out.amazonses.com. [54.240.73.80])
+        by mx.google.com with ESMTPS id 6a1803df08f44-6c534784c95si88117946d6.417.2024.09.10.12.00.21
+        for <eventos@ing.puc.cl>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Sep 2024 12:00:21 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl designates 54.240.73.80 as permitted sender) client-ip=54.240.73.80;
+Authentication-Results-Original: mx.google.com;       dkim=pass
+ header.i=@transbank.cl header.s=zvnh63n62n642khaooevh2pbutyxno3x
+ header.b=IvuSlM66;       dkim=pass header.i=@amazonses.com
+ header.s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug header.b="ZSd/d2PA";       spf=pass
+ (google.com: domain of
+ 01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl
+ designates 54.240.73.80 as permitted sender)
+ smtp.mailfrom=01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@webpaycl.transbank.cl;
+       dmarc=pass (p=QUARANTINE sp=QUARANTINE dis=NONE)
+ header.from=transbank.cl
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=zvnh63n62n642khaooevh2pbutyxno3x; d=transbank.cl; t=1725994820;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date;
+	bh=IUmpoUBuG49m/qAwTgxhBOqEGEWtRvTaIk5IgWtn+tU=;
+	b=IvuSlM6681OWFcI6Fq/xxXhLmVtQu1fynFcxqllXjtuIVWgit8tEBrxTUlmvQjPB
+	1L2PyzDFNGeAXMqGqzuSH1ewZ2GFeGYzzsjHdiNZc3gMKb0XeFFqIp3dHhc9mX4+mkG
+	CNCLWe+j8xdFtATpLo4d0ykdCLFYxASemxOj/+v2exQjYDKGK4IjD7Z912OlT77vK/L
+	/P+RGxregveP/Qh3nY2+EAskdzgvNF+/vyoiGMl27dJzoe7HILUnSK2P2IOGsXobCFv
+	r1Ix1xSznLLwR3KcxLzTcUoV2Gz7fOVjnumdGf8vKcrIGkIZ96e3QMmkKUuJn+70Alw
+	+yI0Yq7EJw==
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+	s=ug7nbtf4gccmlpwj322ax3p6ow6yfsug; d=amazonses.com; t=1725994820;
+	h=From:To:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-ID:Date:Feedback-ID;
+	bh=IUmpoUBuG49m/qAwTgxhBOqEGEWtRvTaIk5IgWtn+tU=;
+	b=ZSd/d2PAZ38i+tZOku3xCU4gyLmll/UsOLeVkSuWs7I/Hvrxf3YJDr2tQO+nbR8N
+	1Ox52WBAgAwK6RCuZSttXyScn6AzzmloNGBsdtodZF6vQzgIo+U6Pifr/Ou1OVaO4gW
+	jAc6scSDw6at7+p80yQ+3JlHuUd4cStzIOtyIqKk=
+From: webpaycl@transbank.cl
+To: eventos@ing.puc.cl
+Subject: webpay.cl - pago recibido
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <01000191dd4ee295-a514207d-1684-484f-b3f6-08f1437cd833-000000@email.amazonses.com>
+Date: Tue, 10 Sep 2024 19:00:20 +0000
+Feedback-ID: ::1.us-east-1.2/JYLl83YGntUFnRdsVWdVukdUIH4paxApZstwNC0W4=:AmazonSES
+X-SES-Outgoing: 2024.09.10-54.240.73.80
+X-MS-Exchange-Organization-ExpirationStartTime: 10 Sep 2024 19:00:25.0001
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ebfda541-612e-4c38-f1ba-08dcd1cad3fd
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 5ff5d9fa-f83f-4ac1-a4d2-eb48ea0a00d2:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+ SA2PEPF00001509:EE_|DS0PR11MB8739:EE_|SA0PR11MB4719:EE_
+X-MS-Exchange-Organization-AuthSource:
+ SA2PEPF00001509.namprd04.prod.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: ebfda541-612e-4c38-f1ba-08dcd1cad3fd
+X-LD-Processed: 5ff5d9fa-f83f-4ac1-a4d2-eb48ea0a00d2,ExtFwd
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|43022699015|2092899012|12012899012|5062899012|3092899012|3072899012|69100299015|32142699015|3613699012;
+X-Forefront-Antispam-Report:
+ CIP:209.85.222.72;CTRY:US;LANG:es;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-ua1-f72.google.com;PTR:mail-ua1-f72.google.com;CAT:NONE;SFS:(13230040)(43022699015)(2092899012)(12012899012)(5062899012)(3092899012)(3072899012)(69100299015)(32142699015)(3613699012);DIR:INB;
+X-MS-Exchange-ForwardingLoop:
+ ForwardingHandled;5ff5d9fa-f83f-4ac1-a4d2-eb48ea0a00d2
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2024 19:00:24.9533
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebfda541-612e-4c38-f1ba-08dcd1cad3fd
+X-MS-Exchange-CrossTenant-Id: 5ff5d9fa-f83f-4ac1-a4d2-eb48ea0a00d2
+X-MS-Exchange-CrossTenant-AuthSource:
+ SA2PEPF00001509.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB8739
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:08.5695857
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.7939.015
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097)(140003);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RTg5U3ZFd3d2YU95bXRIS3J2Y0JxQi9QSUdtTGxiQUxGUmNQdk51YUhJZExt?=
+ =?utf-8?B?QVJlMzZmc04veU53YVllZ0NLQ0VuWFZUc21XK2x5ZHlEbTVZcmZIbXh3a2h6?=
+ =?utf-8?B?YzNrK3djRmZqbHVyZ2JXdDdubSs4M0tIOHlhSlJaVzZhbW9lTE9OZGlKZzBW?=
+ =?utf-8?B?MHRvZ29kQ2VqMTU2cW1sT1IyTU4vSExKR09qemFHby9wV1F1ZldtdUxBWWF2?=
+ =?utf-8?B?enhSYnV5d2p2VjlsOHZZR2szd3FHSVZydEpLVXVNZHEyYW1CMGZ1NFI3Yi96?=
+ =?utf-8?B?SDVhblp2VXRnZWFuaEdteEFRVVZqQ3RtQ0M1QXBYQU1FYjhVSXdoNTFHbDBq?=
+ =?utf-8?B?SnhIcE12UXJselBWZ0M2S1AzQ2ZXVFJ3dHBiMnZpbHo0MGFCbGd1WnI4YUo3?=
+ =?utf-8?B?aW1SZklVSE50TlBoODNUd1BmMmZ1ekszanNhL2RXbXBveTZYUVFWdEhTbnNv?=
+ =?utf-8?B?WjkrSmNBMHJCZW5LdUVmcUVqSFFEYkI5NmVGMnljMVEvMFYwNW1vWlRLOEVX?=
+ =?utf-8?B?WTJ3UURWSmZwV3hKQks0R09FdlM1eHlLVUo2QzA2VitKT2hoSThIZ01IL0pZ?=
+ =?utf-8?B?NEUzN1JEcFlpTnhPeUJoaVZkR05VZnBMM0x0WVFPSUlIOUNuNjRubTZDU0Zz?=
+ =?utf-8?B?RmtlVXdOOWNERVNBZ3lRWitkMzR2VGNGaTA0cVk3aHlDOGZDZGpBR29ZTmN3?=
+ =?utf-8?B?M21BSjVtZVRXbnVWWDJNaUdTM3N2VHR3OXluZldpOStNRFNIQmI1UFNCRGEv?=
+ =?utf-8?B?M0YyNFo1dG9TYnIrYmtYWVFyU3Y0Q1lzd2FWWW1IOFYxWk5TRjJ4WlZYTTNM?=
+ =?utf-8?B?MzVjM0NMcjNWYU5VS0t0dTdFdTBpaGx5ck1sSk14Y0hOWlhJbjhQQ3pETDRr?=
+ =?utf-8?B?UXVnTUFpU3drcmJzaW9VempYU0Mwb3hnR1NKTzE3eE1FR3FvM0lnTnlaSk1m?=
+ =?utf-8?B?T1N2U1FwL2JubXFJOFdoYVZESm9WY3RHMHU0WXNiQndCY1ZjMktoOUZJRmsr?=
+ =?utf-8?B?Q3pmRlFGT29nNnFsTGNFd3RUWGwrbUMxUnJqdlFHc2tEM2JNVkIvOHBUcVZF?=
+ =?utf-8?B?UFdLYmlPS3RsTFdGcEJ3TEdJS090OGRwdGVUV2NEK1V0Ry85V2RWRHpZNDNM?=
+ =?utf-8?B?dXpKRVR6SFZIZnA5dU56WXdrYSt5UTg3c0JKamNUV2dIYVJoWDJDa3FrbU5r?=
+ =?utf-8?B?V0ZreHp0QzFmQWtzVGJMNnUxelFiUE1iZDdDdjNnWjB3ODEwWEpHUkdBa05p?=
+ =?utf-8?B?WUJBR1VKSFhqNTZ5cndpUW5QN3BMWWJ4S0xickhEOWV4bDNKOUFSQzgvbjFh?=
+ =?utf-8?B?OUwyTHh1SnUrRXlia0hSaTlvVXpWVmVxRFZiMlFSM01IQlFSY3NuSFBZS0g4?=
+ =?utf-8?B?bHU0VTQ2cVJlMDlJci9UNSswb0JhbU85eXhUdVVGbW5ad0xNa2FxY1RHa3pi?=
+ =?utf-8?B?bjVaYXNLTDgvV3lMelMzSkVvV2xjeGdHYm0wZlNYZEF6OSt3UW5XaFc4ZlBE?=
+ =?utf-8?B?Z3FkNldQYmNpcTF0SmwvYWFaY3JTU25RS0lFS3hnamhYbEVoazBTRVBOOTNM?=
+ =?utf-8?B?aHBhY0tFU0xFQ1EvVytUUzlqckxaTjN3MzRtcUJiOVdDT1dySkVTM3Y4UjJm?=
+ =?utf-8?B?WnJZUDdLaGY2N1Z3Ym5kNzlKNzFTMW56OEo5MHNzS3A1VEFvYk9wNXR6eElZ?=
+ =?utf-8?B?ZkU4SkI5SzQ2Q1A5akQvM1U3SzRNdWxmRnFnaXpRUE1hdlRtYjJEUFl5KzlK?=
+ =?utf-8?B?eDY2UlJCRTZ4anplRm5nTFpxR3dSMG9ZSnNpRnM0dDliSnBtWTkyOGFYa1Jx?=
+ =?utf-8?B?eE8wclRFOG9CZW1Jb0dJTHZoV1ZzNjNaKytyUUhuMkJqUkllUm1EOW9NMm93?=
+ =?utf-8?B?WDdmbk9mRS84dDRIQ0VkUDRzbDBuRkV3dWNJUWx2TWw0YVA2WkhHMjV1WnBY?=
+ =?utf-8?B?Yjl1Qkp3dnFkcTJKQjVrSjYzZER2NjhKWDBpbWZTWGthWk1GSlEwd1hhbVlE?=
+ =?utf-8?B?NjNTekk3UFdSdXlpZWQ3dkE4b0wzNVFMTEFja1NLQ1g5VXhYUXdwSlM4K28r?=
+ =?utf-8?B?Zmt6Y09WQkgxMkFHZERoY2l5dGxxU0Q0NTFYZkl0blg2Mjk3U1lvM3BLcGlm?=
+ =?utf-8?B?RFJBdHJ0UHptR2UvMndaUmJWTUVQWWhkZGhKOVlQRkh6anEwRWZGaXNKcGMz?=
+ =?utf-8?B?RmZzMkpDeGhFQVRkZ1J5Q2dNcHlPcExCZUM1bTk3S2k1LzFkeWVKK2JDS01M?=
+ =?utf-8?B?emFnbU44VzFrd1FFOXV0bDIzUk1ucUM5cTBCMncxM1lEakFRM09pZktkZWVU?=
+ =?utf-8?B?RkhEck4vbktnT0VOQjNFYkptSDJWa0dIMkhoR3U1SHpuWWJ6UWRxNWVlVGdW?=
+ =?utf-8?B?RGV4SFJEMm9RTmFHVGpLNjFmM2IvZkFoQURZWldUYVBCU1FCeDdNK0d1L05h?=
+ =?utf-8?B?YklLMEYrYyt4YXpodU9jdlhibUJhY3dKb3JDaWJ5bnluV01USUNNSy9jVFNI?=
+ =?utf-8?B?bEFMcXYvZU9qV20wdzZWRlRrQWVDSlpiVlpINVlPSUNiSTJLK3FBOFpvSjVu?=
+ =?utf-8?B?ODdiTFFVeFJHci9ST2NGSFR1MVM2WE9mQjdTaHZKcHhJK0RVVFl1TnlLWlZn?=
+ =?utf-8?B?aDg3OTdhUWJ6eGxYYXhXbXE1WEg0UGptaW1DNUpHY2VoSHZhZEQ0cHV6ck1k?=
+ =?utf-8?B?OEdmOGFQNU1ET2R1My9aSnRtNkd3WXh2ZkRxelEyenlNS0RkNGRoMlNPMEFH?=
+ =?utf-8?B?NU5yTUtOSDFvN0JocHZTM0pIaDRhR0JPa3J0UXc3YU1BTWxBajZVbXpadHNO?=
+ =?utf-8?Q?xMSCBH8LgBz6UoblqRDKvh4N7xbnMUPMWlousxz4rj?=
+MIME-Version: 1.0
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns=3D"http://www.w3.=
+org/1999/xhtml"><head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"> <=
+!-- utf-8 works for most cases -->
+    <meta name=3D"viewport" content=3D"width=3Ddevice-width"> <!-- Forcing =
+initial-scale shouldn't be necessary -->
+    <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge"> <!-- Use th=
+e latest (edge) version of IE rendering engine -->
+    <meta name=3D"x-apple-disable-message-reformatting"> <!-- Disable auto-=
+scale in iOS 10 Mail entirely -->
+    <title>Transbank</title> <!-- The title tag shows in email notification=
+s, like Android 4.4. -->
+    <!-- Web Font / @font-face : BEGIN -->
+    <!-- NOTE: If web fonts are not required, lines 9 - 26 can be safely re=
+moved. -->
+    <!-- Desktop Outlook chokes on web font references and defaults to Time=
+s New Roman, so we force a safe fallback font. -->
+    <!--[if mso]>
+    <style>
+        * {
+            font-family: sans-serif !important;
+        }
+    </style>
+    <![endif]-->
+    <!-- All other clients get the webfont reference; some will render the =
+font and others will silently fail to the fallbacks. More on that here: htt=
+p://stylecampaign.com/blog/2015/02/webfont-support-in-email/ -->
+    <!--[if !mso]><!-->
+    <!-- insert web font reference, eg: <link href=3D'https://fonts.googlea=
+pis.com/css?family=3DRoboto:400,700' rel=3D'stylesheet' type=3D'text/css'> =
+-->
+    <!--<![endif]-->
+    <!-- Web Font / @font-face : END -->
+    <!-- CSS Reset -->
+    <style>
+        /* What it does: Remove spaces around the email design added by som=
+e email clients. */
+        /* Beware: It can remove the padding / margin and add a background =
+color to the compose a reply window. */
+        html,
+        body {
+            margin: 0 auto !important;
+            padding: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+        }
+
+        /* What it does: Stops email clients resizing small text. */
+        * {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* What it does: Centers email on Android 4.4 */
+        div[style*=3D"margin: 16px 0"] {
+            margin: 0 !important;
+        }
+
+        /* What it does: Stops Outlook from adding extra spacing to tables.=
+ */
+        table,
+        td {
+            mso-table-lspace: 0pt !important;
+            mso-table-rspace: 0pt !important;
+        }
+
+        /* What it does: Fixes webkit padding issue. Fix for Yahoo mail tab=
+le alignment bug. Applies table-layout to the first 2 tables then removes f=
+or anything nested deeper. */
+        table {
+            border-spacing: 0 !important;
+            border-collapse: collapse !important;
+            table-layout: fixed !important;
+            margin: 0 auto !important;
+        }
+
+        table table table {
+            table-layout: auto;
+        }
+
+        /* What it does: Uses a better rendering method when resizing image=
+s in IE. */
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        /* What it does: A work-around for iOS meddling in triggered links.=
+ */
+        .mobile-link--footer a,
+        a[x-apple-data-detectors] {
+            color: inherit !important;
+            text-decoration: underline !important;
+        }
+
+        /* What it does: Prevents underlining the button text in Windows 10=
+ */
+        .button-link {
+            text-decoration: none !important;
+        }
+    </style>
+    <!-- Progressive Enhancements -->
+    <style>
+        /* What it does: Hover styles for buttons */
+        .button-td,
+        .button-a {
+            transition: all 100ms ease-in;
+        }
+
+        .button-td:hover,
+        .button-a:hover {
+            background: #555555 !important;
+            border-color: #555555 !important;
+        }
+
+        .text-p {
+            font-size: 14px;
+            line-height: 110%;
+        }
+
+        .text-tit {
+            font-size: 24px;
+            line-height: 110%;
+        }
+
+        .text-tit-2 {
+            font-size: 28px;
+            line-height: 110%;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 480px) {
+
+            .text-p {
+                font-size: 14px !important;
+                line-height: 140% !important;
+            }
+
+            .text-tit {
+                font-size: 24px !important;
+                line-height: 120% !important;
+            }
+
+
+            /* What it does: Forces elements to resize to the full width of=
+ their container. Useful for resizing images beyond their max-width. */
+            .fluid {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+
+            /* What it does: Forces table cells into full-width rows. */
+            .stack-column,
+            .stack-column-center {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                direction: ltr !important;
+            }
+
+            /* And center justify these ones. */
+            .stack-column-center {
+                text-align: center !important;
+            }
+
+            /* What it does: Generic utility class for centering. Useful fo=
+r images, buttons, and nested tables. */
+            .center-on-narrow {
+                text-align: center !important;
+                display: block !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                float: none !important;
+            }
+
+            table.center-on-narrow {
+                display: inline-block !important;
+            }
+
+        }
+    </style>
+</head>
+
+<body width=3D"100%" bgcolor=3D"#F1F1F1" style=3D"margin: 0; padding-bottom=
+: 100px;">
+<center style=3D"width: 100%; background: #F1F1F1;">
+    <!-- Visually Hidden Preheader Text : BEGIN -->
+    <!-- Visually Hidden Preheader Text : END -->
+    <!--
+    Set the email width. Defined in two places:
+    1. max-width for all clients except Desktop Windows Outlook, allowing t=
+he email to squish on narrow but never go wider than 680px.
+    2. MSO tags for Desktop Windows Outlook enforce a 680px width.
+    Note: The Fluid and Responsive templates have a different width (600px)=
+. The hybrid grid is more "fragile", and I've found that 680px is a good wi=
+dth. Change with caution.
+-->
+    <div style=3D"max-width: 680px; margin: auto;">
+        <!--[if mso]>
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" width=3D"680" align=3D"center">
+            <tr>
+                <td>
+        <![endif]-->
+
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px;">
+            <tr>
+                <td style=3D"padding: 25px 15px 15px 15px; text-align: cent=
+er">
+                    <img src=3D"https://www.webpay.cl/logos/institucion/web=
+paycl.png" width=3D"140" alt=3D"" border=3D"0" style=3D"height: auto; font-=
+family: sans-serif; font-size: 15px; line-height: 15px; color: #555555;">
+                </td>
+            </tr>
+        </table>
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px;">
+            <tr>
+                <td style=3D"height:5px; background-color:#6b1a6b;" width=
+=3D"70%">
+                </td>
+                <td style=3D"height:5px; background-color:#ef0e77;" width=
+=3D"15%">
+                </td>
+                <td style=3D"height:5px; background-color:#03c6b4;" width=
+=3D"15%">
+                </td>
+            </tr>
+        </table>
+
+        <!-- Email Body : BEGIN -->
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px; ">
+            <!-- 1 Column Text + Button : BEGIN -->
+            <tr>
+                <td bgcolor=3D"#ffffff">
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%">
+                        <tr>
+                            <td class=3D"text-p" style=3D"padding: 30px  30=
+px 0 30px; text-align: left; font-family: sans-serif; mso-height-rule: exac=
+tly; line-height: 20px; color: #555555;">
+                                <span class=3D"text-tit-2">NOTIFICACION DE =
+PAGO RECIBIDO</span>
+                                <p> Estimado usuario, ha recibido un pago c=
+on los siguientes datos:</p>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%" style=3D"text-align: left; font-famil=
+y: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #555555;=
+ ">
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Comercio:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">PUC Escuela de Ingenier=C3=ADa<=
+/td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Tipo de pago:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">PUC Escuela de Ingenier=C3=ADa</=
+td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Fecha de pago:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">10-09-2024</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Hora de pago:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">15:57:07</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Monto pagado:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">20.000</td>
+                        </tr>
+
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Orden de pago:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">F7zbsysQgfT-y3PGVGYgx</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Cod. autorizacion:</strong></=
+td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">870572</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Forma de pago:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">VN</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ;">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ;vertical-align: top;"><strong>Numero de cuotas:</strong></t=
+d>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0;vertical-align: top;">0</td>
+                        </tr>
+                    </table>
+
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%">
+                        <tr>
+                            <td class=3D"text-p" style=3D"padding: 30px  30=
+px 7px 30px; text-align: left; font-family: sans-serif; mso-height-rule: ex=
+actly; line-height: 20px; color: #555555;">
+                                <span class=3D"text-tit">DETALLE</span>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%" style=3D"text-align: left; font-famil=
+y: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #555555;=
+ ">
+
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Correo:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">jaimemontes1965@gmail.com</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Nombre:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">Jaime Montes Infante</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Rut o pasaporte:</strong></t=
+d>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">10471455-2</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Monto:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">20.000</td>
+                        </tr>
+                        <tr style=3D"padding: 50px 0 ; ">
+                            <td class=3D"text-p" width=3D"40%" style=3D"pad=
+ding: 5px 30px ; vertical-align: top;"><strong>Observaciones:</strong></td>
+                            <td class=3D"text-p" width=3D"60%" style=3D"pad=
+ding: 5px 30px 5px 0; vertical-align: top;">Jaime Montes Infante</td>
+                        </tr>
+        </table>
+
+
+
+                </td>
+            </tr>
+            <!-- 1 Column Text + Button : END -->
+            <!-- 1 Column Text + Button : BEGIN -->
+
+
+            <!-- 1 Column Text + Button : BEGIN -->
+        </table>
+
+
+
+
+
+
+
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px; ">
+            <!-- 1 Column Text + Button : BEGIN -->
+
+            <!-- 1 Column Text + Button : END -->
+            <!-- 1 Column Text + Button : BEGIN -->
+            <tr>
+                <td bgcolor=3D"#ffffff">
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%">
+                        <tr>
+                            <td class=3D"text-p" style=3D"padding: 10px  30=
+px 30px 30px; text-align: left; font-family: sans-serif; mso-height-rule: e=
+xactly; line-height: 20px; color: #555555;">
+                                <p> La informacion contenida en este correo=
+ electronico es informativa y ha sido enviada como respaldo de la transacci=
+on cursada con tarjeta de credito o Redcompra. Es responsabilidad del estab=
+lecimiento, consignar el presente pago al registro del cliente en sus siste=
+mas.</p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+
+            <!-- 1 Column Text + Button : BEGIN -->
+        </table>
+
+
+
+
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px;">
+            <tr>
+                <td style=3D"height:5px; background-color:#6b1a6b;" width=
+=3D"70%">
+                </td>
+                <td style=3D"height:5px; background-color:#ef0e77;" width=
+=3D"15%">
+                </td>
+                <td style=3D"height:5px; background-color:#03c6b4;" width=
+=3D"15%">
+                </td>
+            </tr>
+        </table>
+
+
+
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px;">
+            <tr>
+                <td bgcolor=3D"#e3e3e3">
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%" style=3D"text-align: left; font-famil=
+y: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #555555;=
+ background-color: #e3e3e3;">
+                        <tr>
+                            <td style=3D"padding: 10px 30px;">
+                                <p style=3D"font-size: 12px; line-height: 1=
+4px">
+                                    <strong>Nota:</strong> Las reglas de ac=
+entuacion de este mail fueron omitidas para asegurar que su visualizacion s=
+ea posible para todos los clientes </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+
+
+
+
+
+
+
+
+
+        <table role=3D"presentation" cellspacing=3D"0" cellpadding=3D"0" bo=
+rder=3D"0" align=3D"center" width=3D"100%" style=3D"max-width: 680px;">
+            <tr>
+                <td bgcolor=3D"#f1f1f1">
+                    <table role=3D"presentation" cellspacing=3D"0" cellpadd=
+ing=3D"0" border=3D"0" width=3D"100%" style=3D"text-align: left; font-famil=
+y: sans-serif; mso-height-rule: exactly; line-height: 20px; color: #555555;=
+ background-color: #f1f1f1; height: 70px;">
+                        <tr>
+                            <td>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <!-- Email Body : END -->
+        <!-- Email Footer : BEGIN -->
+        <!-- Email Footer : END -->
+        <!--[if mso]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+    </div>
+</center>
+</body>
+
+</html>

@@ -19,6 +19,8 @@ def poner_tildes(nombre):
         nombre = nombre.replace("=C3=-B3", "ó")
     if "=C3=BA" in nombre:
         nombre = nombre.replace("=C3=BA", "ú")
+    if "=C3=-B1" in nombre:
+        nombre = nombre.replace("==C3=B1", "ñ")
     if "=C3=B1" in nombre:
         nombre = nombre.replace("=C3=B1", "ñ")
     if "=C3=-B1" in nombre:
